@@ -15,6 +15,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 
+import com.simplilearn.entity.Address;
+import com.simplilearn.entity.Courses;
 import com.simplilearn.entity.PhoneNumber;
 import com.simplilearn.entity.Student;
 import com.simplilearn.util.HibernateUtil;
@@ -52,6 +54,23 @@ public class AddStudentServlet extends HttpServlet {
 			throws ServletException, IOException {
 
 		// Read data
+		Student student = populateStudent(request);
+
+		// Save data in db
+		SessionFactory sf = HibernateUtil.buildSessionFactory();
+		Session session = sf.openSession();
+
+		Transaction tx = session.beginTransaction();
+		session.save(student);
+		tx.commit();
+
+		// Print respnse
+		PrintWriter out = response.getWriter();
+		out.println("<html><body><h4>Student saved successfully!</h4></body></html>");
+
+	}
+
+	private Student populateStudent(HttpServletRequest request) {
 		String fname = request.getParameter("fname");
 		String lname = request.getParameter("lname");
 
@@ -87,19 +106,59 @@ public class AddStudentServlet extends HttpServlet {
 		phones.add(ph3);
 
 		student.setPhoneNumbers(phones);
-
-		// Save data in db
-		SessionFactory sf = HibernateUtil.buildSessionFactory();
-		Session session = sf.openSession();
-
-		Transaction tx = session.beginTransaction();
-		session.save(student);
-		tx.commit();
-
-		// Print respnse
-		PrintWriter out = response.getWriter();
-		out.println("<html><body><h4>Student saved successfully!</h4></body></html>");
-
+		
+		
+		
+		
+		// Collect courses
+		List<Student> students = new ArrayList<>();
+		students.add(student);
+		
+		String courseName1 = request.getParameter("courses_1");
+		String courseType1 = request.getParameter("courseType_1");
+		
+		String courseName2 = request.getParameter("courses_2");
+		String courseType2 = request.getParameter("courseType_2");
+		
+		String courseName3 = request.getParameter("courses_3");
+		String courseType3 = request.getParameter("courseType_3");
+		
+		List<Courses> courses = new ArrayList<>();
+		Courses course1 = new Courses();
+		course1.setCourseName(courseName1);
+		course1.setCourseType(courseType1);
+		course1.setStudents(students);
+		courses.add(course1);
+		
+		Courses course2 = new Courses();
+		course2.setCourseName(courseName2);
+		course2.setCourseType(courseType2);
+		course2.setStudents(students);
+		courses.add(course2);
+		
+		
+		Courses course3 = new Courses();
+		course3.setCourseName(courseName3);
+		course3.setCourseType(courseType3);
+		course3.setStudents(students);
+		courses.add(course3);
+		
+		student.setCourses(courses);
+		
+		// opulate Address
+		
+		String street = request.getParameter("street");
+		String city = request.getParameter("city");
+		String state = request.getParameter("state");
+		
+		Address address = new Address();
+		address.setState(state);
+		address.setCity(city);
+		address.setStreet(street);
+		
+		student.setAddress(address);
+		
+		return student;
 	}
 
 }

@@ -4,9 +4,13 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -27,6 +31,32 @@ public class Student {
 
 	@OneToMany(mappedBy = "student", cascade = CascadeType.ALL)
 	private List<PhoneNumber> phoneNumbers;
+
+	@ManyToMany(cascade = CascadeType.ALL)
+	@JoinTable(name = "student_course_link", joinColumns = { @JoinColumn(name = "student_id") }, inverseJoinColumns = {
+			@JoinColumn(name = "course_id") })
+	private List<Courses> courses;
+	
+	@Embedded
+	private Address address;
+
+	
+
+	public String getCourses() {
+
+		StringBuilder sb = new StringBuilder();
+		if (courses != null) {
+			for (Courses course : courses) {
+				sb.append(course.getCourseName() + ",");
+			}
+		}
+		return sb.toString();
+
+	}
+
+	public void setCourses(List<Courses> courses) {
+		this.courses = courses;
+	}
 
 	public long getStudent_id() {
 		return student_id;
@@ -65,4 +95,14 @@ public class Student {
 	public void setPhoneNumbers(List<PhoneNumber> phoneNumbers) {
 		this.phoneNumbers = phoneNumbers;
 	}
+
+	public Address getAddress() {
+		return address;
+	}
+
+	public void setAddress(Address address) {
+		this.address = address;
+	}
+
+	
 }

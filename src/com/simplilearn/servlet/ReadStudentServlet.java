@@ -54,6 +54,10 @@ public class ReadStudentServlet extends HttpServlet {
 
 		out.print("<th> LastName </th>");
 		out.print("<th> PhoneNumbers</th>");
+		out.print("<th> Courses</th>");
+		
+		out.print("<th> Address</th>");
+		
 		out.print("</tr>");
 
 		for (Student student : students) {
@@ -62,6 +66,8 @@ public class ReadStudentServlet extends HttpServlet {
 			out.print("<td>"+student.getFname()+"</td>");
 			out.print("<td>"+student.getLname()+"</td>");
 			out.print("<td>"+student.getPhoneNumbers()+"</td>");
+			out.print("<td>"+student.getCourses()+"</td>");
+			out.print("<td>"+student.getAddress()+"</td>");
 			out.print("</tr>");
 		}
 		out.print("</table></body></html>");
