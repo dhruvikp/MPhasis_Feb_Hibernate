@@ -13,20 +13,20 @@ import javax.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 
-import com.simplilearn.entity.EProduct;
+import com.simplilearn.entity.Student;
 import com.simplilearn.util.HibernateUtil;
 
 /**
- * Servlet implementation class ListProductServlet
+ * Servlet implementation class ReadStudentServlet
  */
-@WebServlet("/read-product")
-public class ListProductServlet extends HttpServlet {
+@WebServlet("/read-student")
+public class ReadStudentServlet extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 
 	/**
 	 * @see HttpServlet#HttpServlet()
 	 */
-	public ListProductServlet() {
+	public ReadStudentServlet() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
@@ -37,39 +37,36 @@ public class ListProductServlet extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response)
 			throws ServletException, IOException {
-
 		PrintWriter out = response.getWriter();
 		out.println("<html><body>");
 
 		SessionFactory sf = HibernateUtil.buildSessionFactory();
+
 		Session session = sf.openSession();
 
-		/*
-		 * HQL - Hibernate Query Language. This is very similar to SQL language, only
-		 * difference is Instead of Table name you need to refer EntityName
-		 * 
-		 */
-		List<EProduct> products = session.createQuery(" from EProduct").list();
-		out.println("<h1> Product List :- </h1>");
-		out.println("<style> table,td,th {border:1px solid green; padding:10px;}</style>");
-		out.println("<table>");
+		List<Student> students = session.createQuery(" from Student").list();
 
-		out.println("<tr>");
-		out.print("<th> Product ID </th>");
-		out.print("<th> Product Name </th>");
-		out.print("<th> Product Price </th>");
+		out.println("<h1> Student List:- </h1>");
+		out.println("<style> table,td,th { border:2px solid green; padding:10px;} </style>");
+		out.println("<table> <tr>");
+		out.print("<th> Student ID </th>");
+		out.print("<th> FirstName </th>");
+
+		out.print("<th> LastName </th>");
+		out.print("<th> PhoneNumbers</th>");
 		out.print("</tr>");
 
-		for (EProduct p : products) {
+		for (Student student : students) {
 			out.print("<tr>");
-			out.print("<td>" + p.getId() + "</td>");
-			out.print("<td>" + p.getName() + "</td>");
-			out.print("<td>" + p.getPrice() + "</td>");
+			out.print("<td>"+student.getStudent_id()+"</td>");
+			out.print("<td>"+student.getFname()+"</td>");
+			out.print("<td>"+student.getLname()+"</td>");
+			out.print("<td>"+student.getPhoneNumbers()+"</td>");
 			out.print("</tr>");
 		}
-		out.print("</table>");
-		out.println("</body></html>");
+		out.print("</table></body></html>");
 		session.close();
+
 	}
 
 	/**
